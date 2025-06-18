@@ -45,8 +45,8 @@ if [[ "$ap_choice" == "y" || "$ap_choice" == "Y" ]]; then
   read -p "📶 Enter SSID (network name): " wifi_ssid
   read -p "🔐 Enter Password (min 8 chars): " wifi_pass
 
-  sudo systemctl stop hostapd
-  sudo systemctl stop dnsmasq
+  sudo systemctl stop hostapd || true
+  sudo systemctl stop dnsmasq || true
 
   sudo tee /etc/hostapd/hostapd.conf > /dev/null <<EOF
 interface=wlan0
