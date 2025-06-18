@@ -3,23 +3,24 @@
 set -e
 LOGFILE="$HOME/tuxhex-install.log"
 
-echo "[*] TuxHex one-shot installer starting..." | tee -a $LOGFILE
+echo "[*] TuxHex one-shot installer starting..." | tee -a "$LOGFILE"
 
 # Step 1: Update system
-sudo apt update && sudo apt upgrade -y | tee -a $LOGFILE
+sudo apt update && sudo apt upgrade -y | tee -a "$LOGFILE"
 
-# Step 2: Install all dependencies
-sudo apt install -y python3 python3-pip python3-venv git flask scapy hostapd dnsmasq | tee -a $LOGFILE
+# Step 2: Install base dependencies (Flask via pip, not apt)
+sudo apt install -y python3 python3-pip python3-venv git scapy hostapd dnsmasq | tee -a "$LOGFILE"
 
 # Step 3: Set up virtual environment
-cd "$HOME/tuxhex" || (echo "[!] Repo not cloned in $HOME/tuxhex" | tee -a $LOGFILE; exit 1)
+cd "$HOME/tuxhex" || (echo "[!] Repo not cloned in $HOME/tuxhex" | tee -a "$LOGFILE"; exit 1)
 python3 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt | tee -a $LOGFILE
+pip install --upgrade pip
+pip install -r requirements.txt | tee -a "$LOGFILE"
 
 # Step 4: Set up systemd service
 SERVICE_FILE="/etc/systemd/system/tuxhex.service"
-sudo tee $SERVICE_FILE > /dev/null <<EOF
+sudo tee "$SERVICE_FILE" > /dev/null <<EOF
 [Unit]
 Description=TuxHex Flask Dashboard
 After=network.target
@@ -39,7 +40,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable tuxhex
 sudo systemctl start tuxhex
 
-# Step 5: Ask user about setting up AP mode
+# Step 5: Ask about Access Point setup
 read -p "🛜 Do you want to configure the Pi as a Wi-Fi Access Point? (y/n): " ap_choice
 if [[ "$ap_choice" == "y" || "$ap_choice" == "Y" ]]; then
   read -p "📶 Enter SSID (network name): " wifi_ssid
@@ -85,4 +86,4 @@ EOF
   sudo systemctl start dnsmasq
 fi
 
-echo "✅ TuxHex setup complete. Dashboard will run at boot." | tee -a $LOGFILE
+echo "✅ TuxHex setup complete. Dashboard will run at boot." | tee -a "$LOGFILE"
