@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-LOGFILE=/home/pi/tuxhex-install.log
+LOGFILE="$HOME/tuxhex-install.log"
 
 echo "[*] TuxHex one-shot installer starting..." | tee -a $LOGFILE
 
@@ -12,7 +12,7 @@ sudo apt update && sudo apt upgrade -y | tee -a $LOGFILE
 sudo apt install -y python3 python3-pip python3-venv git flask scapy hostapd dnsmasq | tee -a $LOGFILE
 
 # Step 3: Set up virtual environment
-cd ~/tuxhex || (echo "[!] Repo not cloned in ~/tuxhex" | tee -a $LOGFILE; exit 1)
+cd "$HOME/tuxhex" || (echo "[!] Repo not cloned in $HOME/tuxhex" | tee -a $LOGFILE; exit 1)
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt | tee -a $LOGFILE
@@ -25,9 +25,9 @@ Description=TuxHex Flask Dashboard
 After=network.target
 
 [Service]
-User=pi
-WorkingDirectory=/home/pi/tuxhex
-ExecStart=/home/pi/tuxhex/venv/bin/python3 /home/pi/tuxhex/app.py
+User=$USER
+WorkingDirectory=$HOME/tuxhex
+ExecStart=$HOME/tuxhex/venv/bin/python3 $HOME/tuxhex/app.py
 Restart=always
 
 [Install]
