@@ -1,22 +1,28 @@
 #!/bin/bash
 
-# This script will run once at first boot and then remove itself
+LOGFILE="$HOME/tuxhex-firstboot.log"
+REPO_URL="https://github.com/pluhman321/tuxhex.git"
+CLONE_DIR="$HOME/tuxhex"
 
-LOGFILE=/home/pi/tuxhex-firstboot.log
-SETUP_SCRIPT=/home/pi/setup.sh
+echo "[*] Starting TuxHex first-boot setup..." | tee -a "$LOGFILE"
 
-echo "[*] Running TuxHex first-boot setup..." | tee -a $LOGFILE
-
-if [ -f "$SETUP_SCRIPT" ]; then
-    chmod +x $SETUP_SCRIPT
-    bash $SETUP_SCRIPT | tee -a $LOGFILE
-else
-    echo "[!] setup.sh not found." | tee -a $LOGFILE
+# Clone the GitHub repo if not already present
+if [ ! -d "$CLONE_DIR" ]; then
+    git clone "$REPO_URL" "$CLONE_DIR" | tee -a "$LOGFILE"
 fi
 
-# Remove self from rc.local to prevent re-running
+cd "$CLONE_DIR"
+
+# Ensure we always fetch the latest install.sh
+curl -O https://raw.githubusercontent.com/pluhman321/tuxhex/main/install.sh
+chmod +x install.sh
+
+# Run the installer
+./install.sh | tee -a "$LOGFILE"
+
+# Remove from rc.local to prevent re-running
 sudo sed -i '/tuxhex-firstboot.sh/d' /etc/rc.local
 sudo sed -i '/exit 0/d' /etc/rc.local
 echo "exit 0" | sudo tee -a /etc/rc.local
 
-exit 0
+echo "[✓] TuxHex installation complete. Reboot recommended." | tee -a "$LOGFILE"
