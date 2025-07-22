@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TuxHex Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { background: #1a1a1a; color: #f3f3f3; font-family: "Segoe UI", sans-serif; margin: 0; padding: 0; }
+        header { background-color: #111; border-bottom: 2px solid #0f0; padding: 20px; text-align: center; }
+        header h1 { color: #0f0; margin: 0; font-size: 28px; }
+        main { padding: 40px; text-align: center; }
+        .panel { background: #222; border: 1px solid #444; border-radius: 8px; display: inline-block; padding: 30px; box-shadow: 0 0 10px rgba(0, 255, 0, 0.2); margin-bottom: 20px; }
+        .panel h2 { color: #0f0; }
+        .btn { background-color: #0f0; color: black; border: none; padding: 12px 24px; font-weight: bold; border-radius: 4px; cursor: pointer; display: block; margin: 10px auto; width: 60%; }
+        .btn:hover { background-color: #0c0; }
+        ul { list-style-type: none; padding: 0; }
+        a { text-decoration: none; }
+        .port-scan-panel { margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Hex Dashboard</h1>
+    </header>
+    <main>
+        <div class="panel">
+            <h2>Status: ACTIVE</h2>
+            <p>All modules loaded. No alerts detected.</p>
+        </div>
+
+        <div class="panel">
+            <h2>Network Scanning Modules</h2>
+            <ul>
+                <li><a href="/scan/arp"><button class="btn">🔍 ARP Scan (Find Devices)</button></a></li>
+                <li><a href="/scan/ports"><button class="btn">🔎 Port Scan (Check Open Ports)</button></a></li>
+            </ul>
+        </div>
+
+        <div class="panel">
+            <h2>Wireless Attacks (CLI Only)</h2>
+            <ul>
+                 <li><button class="btn" disabled>Deauthentication (CLI: tuxhex-cli.py deauth)</button></li>
+            </ul>
+        </div>
+
+        <div class="panel">
+            <h2>Upcoming (TODO)</h2>
+            <ul>
+                <li><button class="btn" disabled>MITM Tools</button></li>
+                <li><button class="btn" disabled>Credential Harvesting</button></li>
+                <li><button class="btn" disabled>Advanced Wi-Fi Attacks</button></li>
+            </ul>
+        </div>
+
+        <div class="panel port-scan-panel">
+            <h2>Quick Port Scan</h2>
+            <form method="POST" action="/scan">
+                <input type="text" name="target" placeholder="Enter target IP or domain" required>
+                <button type="submit" class="btn">Start Scan</button>
+            </form>
+            <p style="margin-top: 10px; font-size: 0.9em;">Note: For ethical use only on networks you own or have permission to scan.</p>
+        </div>
+    </main>
+</body>
+</html>
