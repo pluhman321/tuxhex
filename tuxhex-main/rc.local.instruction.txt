@@ -1,2 +1,0 @@
-# Auto-run TuxHex setup once at first boot
-bash /home/pi/tuxhex-firstboot.sh
