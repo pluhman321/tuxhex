@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>ARP Scan Results</title></head>
+<body style="background-color: #1a1a1a; color: #0f0; font-family: monospace;">
+<h1>ARP Scan</h1>
+<form method="POST">
+    Target Subnet: <input type="text" name="target">
+    <input type="submit" value="Scan">
+</form>
+{% if devices %}
+    <h2>Results:</h2>
+    <ul>{% for device in devices %}<li>{{ device.ip }} - {{ device.mac }}</li>{% endfor %}</ul>
+{% endif %}
+<a href="/">Back</a>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head><title>Port Scan Results</title></head>
+<body style="background-color: #1a1a1a; color: #0f0; font-family: monospace;">
+<h1>Port Scan</h1>
+<form method="POST">
+    Target IP: <input type="text" name="target"><br>
+    Ports (comma-separated, e.g., 22,80,443): <input type="text" name="ports">
+    <input type="submit" value="Scan">
+</form>
+{% if open_ports %}
+    <h2>Open Ports:</h2>
+    <ul>{% for port in open_ports %}<li>{{ port }}</li>{% endfor %}</ul>
+{% endif %}
+<a href="/">Back</a>
+</body>
+</html> 
